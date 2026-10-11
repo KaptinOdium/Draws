@@ -17,6 +17,40 @@ local tbl =
 		{
 			data = 
 			{
+				name = "[AutoSim] Necron add forecast",
+				uuid = "9af934d5-bef2-1df6-9df6-4c8668dbec5d",
+				version = 2,
+			},
+			inheritedObjectUUID = "dccf724c-af70-2a70-9b7c-be54af0e9858",
+			inheritedOverwrites = 
+			{
+				actions = 
+				{
+					
+					{
+						type = "add",
+						value = 
+						{
+							data = 
+							{
+								name = "[AutoSim] Necron add forecast",
+								uuid = "151d6a9f-d670-3a3d-80ca-098df146955d",
+								version = 2.1,
+							},
+							inheritedObjectUUID = "dfccd203-926b-4517-9cb3-4e43ed29c602",
+							inheritedOverwrites = 
+							{
+								actionLua = "-- Necron Samurai AutoSim: build resources through the mandatory add sequence.\n-- Baseline: deathless SAM clear 20261009-2319-1296-2, 433.969 seconds.\n-- Zero damage value is a requested scoring preference, not actual resistance.\n-- It spans first adds, the brief boss return, and Abyss until personal return.\n-- Attacks remain available outside the actual travel downtime below.\n-- Keep the ACR's automatic party raid-buff forecast; do not replace it\n-- with fixed windows derived from one earlier party.\n-- No target-slot, AoE, movement, positional, CD, or action-hold overrides.\nlocal api = TensorCore.API.TensorACR\nlocal s = {\n    firstStart = 200.968, firstEnd = 230.859,\n    depart = 247.203, arrive = 261.281,\n    handsEnd = 282.171, back = 296.875,\n    stage = 0, hands = {},\n}\nfunction s.apply()\n    api.setAutoSimKillTime(s.back + 137.094)\n    -- This profile owns these two forecast types. Rebuild at significant\n    -- transitions rather than keeping IDs across reset/schedule replacement.\n    api.clearAutoSimPhases(\"FullDowntime\")\n    api.clearAutoSimPhases(\"BossModifier\")\n    local function phase(kind, a, b, value)\n        if b > a then api.addAutoSimPhase(kind, a, b, value) end\n    end\n    phase(\"BossModifier\", s.firstStart, s.back, 0)\n    phase(\"FullDowntime\", s.depart, s.arrive)\n    phase(\"FullDowntime\", s.handsEnd, s.back)\nend\ns.apply()\ndata.kaptinNecronAutoSim = s\nself.used = true\n",
+							},
+						},
+					},
+				},
+			},
+		},
+		
+		{
+			data = 
+			{
 				displayPath = "",
 				name = "Necron Draws ",
 				uuid = "223a999e-537a-efda-fc69-6be8df0cffce",
